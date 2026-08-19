@@ -236,12 +236,21 @@ html,body{max-width:100%;overflow-x:hidden}
 .fk-checklist{display:flex;flex-wrap:wrap;gap:7px;margin-top:8px}
 .fk-checklist span{font-size:12.5px;font-weight:700;padding:5px 12px;border-radius:999px;
  background:var(--sk-surface);color:var(--sk-ink);border:1px solid var(--sk-line)}
+/* 折りたたみ式プロンプトボックス（2026-08-19〜）。長いプロンプトが常時全文
+   表示されるとページが間延びして最後まで読まれなくなる、との指摘で開閉式に変更。
+   コピーボタンはsummary内＝常に見える位置に置き、閉じたままコピーできるようにする。 */
 .fk-prompt{background:var(--sk-dark1);color:#E7E9EC;border-radius:12px;margin-top:12px;overflow:hidden}
 .fk-prompt-h{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 13px;
- border-bottom:1px solid rgba(255,255,255,.13);font-size:11px;letter-spacing:.06em}
-.fk-prompt-h span{color:var(--sk-hl);font-weight:900}
+ border-bottom:1px solid rgba(255,255,255,.13);font-size:11px;letter-spacing:.06em;cursor:pointer;
+ list-style:none}
+.fk-prompt-h::-webkit-details-marker{display:none}
+.fk-prompt-h>span:first-child{color:var(--sk-hl);font-weight:900;overflow:hidden;text-overflow:ellipsis;
+ white-space:nowrap}
+.fk-prompt-h-right{display:flex;align-items:center;gap:9px;flex:none}
 .fk-prompt-copy{background:rgba(255,255,255,.14);border:0;color:#fff;border-radius:999px;
  padding:4px 12px;font-size:11px;font-weight:700;cursor:pointer}
+.fk-prompt-arrow{color:rgba(255,255,255,.55);font-size:11px;transition:transform .2s ease}
+.fk-prompt[open] .fk-prompt-arrow{transform:rotate(180deg)}
 .fk-prompt pre{margin:0;padding:14px;font-size:12px;line-height:1.95;white-space:pre-wrap;
  font-family:var(--sk-font);color:#DFE2E6}
 .fk-prompt pre i{font-style:normal;color:var(--sk-hl)}
@@ -328,7 +337,10 @@ html,body{max-width:100%;overflow-x:hidden}
 
 <header class="fk-hero">
  <div class="fk-hero-bg"><img src="assets/hero.jpg" alt="薄暗い部屋の木製デスクに置かれたノートPCの画面に、ターミナルのコマンドラインが表示されている様子"></div>
+ 
  <h1>Claude Codeを使い始める前に、<br><em>これだけ入れておいてください。</em></h1>
+ 
+ 
 </header>
 
 <section class="sk-sec">
@@ -381,14 +393,14 @@ html,body{max-width:100%;overflow-x:hidden}
    <div class="fk-step0-body">
     <p class="fk-step-text">Claude Codeは、Anthropic公式が配っているインストールコマンドで入れられます。お使いのOSに合わせて、どちらか1行をターミナルに貼り付けてください。インストール後、初めて「claude」と打って起動したときにブラウザが開き、ログインを求められます。案内に沿って進めばOKです。</p>
     <div class="fk-checklist"><span>Mac・Windowsどちらも対応</span><span>無料でインストールできる</span><span>初回起動時はブラウザでログイン</span><span>使うにはPro以上のプラン登録が必要</span></div>
-    <div class="fk-prompt">
-     <div class="fk-prompt-h"><span>Macの場合（ターミナル）</span><button class="fk-prompt-copy" type="button">コピー</button></div>
-     <pre>curl -fsSL https://claude.ai/install.sh | bash</pre>
-    </div>
-    <div class="fk-prompt">
-     <div class="fk-prompt-h"><span>Windowsの場合（PowerShell）</span><button class="fk-prompt-copy" type="button">コピー</button></div>
-     <pre>irm https://claude.ai/install.ps1 | iex</pre>
-    </div>
+    <details class="fk-prompt">
+      <summary class="fk-prompt-h"><span>Macの場合（ターミナル）</span><span class="fk-prompt-h-right"><button class="fk-prompt-copy" type="button">コピー</button><span class="fk-prompt-arrow">&#9662;</span></span></summary>
+      <pre>curl -fsSL https://claude.ai/install.sh | bash</pre>
+     </details>
+    <details class="fk-prompt">
+      <summary class="fk-prompt-h"><span>Windowsの場合（PowerShell）</span><span class="fk-prompt-h-right"><button class="fk-prompt-copy" type="button">コピー</button><span class="fk-prompt-arrow">&#9662;</span></span></summary>
+      <pre>irm https://claude.ai/install.ps1 | iex</pre>
+     </details>
    </div>
   </details>
  </div>
@@ -404,10 +416,10 @@ html,body{max-width:100%;overflow-x:hidden}
      <p class="fk-step-text">ブラウザ操作を自動化するMCPサーバーです。入れておくと、インスタのリサーチやWebサイトの動作確認まで、Claude Codeに任せられるようになります。<br><strong>使い方：</strong>導入後は、Claude Codeへの指示に「このサイトを開いて確認して」「〇〇を調べて」のように伝えるだけです。あとは自動でブラウザを操作してくれます。</p>
      <div class="fk-checklist"><span>Microsoft公式</span><span>ブラウザ操作を自動化</span><span>調査作業を短縮</span></div>
      
-     <div class="fk-prompt">
-      <div class="fk-prompt-h"><span>ターミナルに貼るコマンド</span><button class="fk-prompt-copy" type="button">コピー</button></div>
+     <details class="fk-prompt">
+      <summary class="fk-prompt-h"><span>ターミナルに貼るコマンド</span><span class="fk-prompt-h-right"><button class="fk-prompt-copy" type="button">コピー</button><span class="fk-prompt-arrow">&#9662;</span></span></summary>
       <pre>claude mcp add playwright npx @playwright/mcp@latest</pre>
-     </div>
+     </details>
      <p style="margin-top:12px;font-size:12px;color:var(--sk-muted)">公式情報：<a href="https://playwright.dev/mcp/clients/claude-code" target="_blank" rel="noopener" style="color:var(--sk-accent2);font-weight:700;text-decoration:underline">Playwright公式ドキュメント</a></p>
     </div>
    </div>
@@ -419,11 +431,11 @@ html,body{max-width:100%;overflow-x:hidden}
      <p class="fk-step-text">LPやWebサイトを作らせたとき、いかにも「AIが作った」印象になりがちなデザインを、独自性のある仕上がりに寄せてくれる拡張です。<br><strong>使い方：</strong>特別な操作は不要です。いつも通り「LPを作って」「UIを作って」と頼むだけで、裏側で自動的に働いて仕上がりの質を底上げしてくれます。</p>
      <div class="fk-checklist"><span>Anthropic公式</span><span>27万件以上インストール</span><span>UI生成時に自動で働く</span></div>
      
-     <div class="fk-prompt">
-      <div class="fk-prompt-h"><span>ターミナルに貼るコマンド</span><button class="fk-prompt-copy" type="button">コピー</button></div>
+     <details class="fk-prompt">
+      <summary class="fk-prompt-h"><span>ターミナルに貼るコマンド</span><span class="fk-prompt-h-right"><button class="fk-prompt-copy" type="button">コピー</button><span class="fk-prompt-arrow">&#9662;</span></span></summary>
       <pre>/plugin marketplace add anthropics/claude-code
 /plugin install frontend-design@claude-code-plugins</pre>
-     </div>
+     </details>
      <p style="margin-top:12px;font-size:12px;color:var(--sk-muted)">公式情報：<a href="https://github.com/anthropics/claude-code/tree/main/plugins/frontend-design" target="_blank" rel="noopener" style="color:var(--sk-accent2);font-weight:700;text-decoration:underline">Anthropic公式リポジトリ</a></p>
     </div>
    </div>
@@ -435,10 +447,10 @@ html,body{max-width:100%;overflow-x:hidden}
      <p class="fk-step-text">いま触っているプロジェクトを読み取り、「ここは自動化できます」「この機能を追加した方がいいです」と提案してくれます。ファイルを書き換えることはない、読み取り専用の拡張です。<br><strong>使い方：</strong>「このプロジェクトにおすすめの自動化を教えて」のように話しかけるだけです。提案されたものを実際に入れるかどうかは、そのつど自分で判断できます。</p>
      <div class="fk-checklist"><span>Anthropic公式</span><span>読み取り専用で安全</span><span>使い方の提案だけしてくれる</span></div>
      
-     <div class="fk-prompt">
-      <div class="fk-prompt-h"><span>Claude Codeに話しかける言葉</span><button class="fk-prompt-copy" type="button">コピー</button></div>
+     <details class="fk-prompt">
+      <summary class="fk-prompt-h"><span>Claude Codeに話しかける言葉</span><span class="fk-prompt-h-right"><button class="fk-prompt-copy" type="button">コピー</button><span class="fk-prompt-arrow">&#9662;</span></span></summary>
       <pre>このプロジェクトにおすすめの自動化を教えて</pre>
-     </div>
+     </details>
      <p style="margin-top:12px;font-size:12px;color:var(--sk-muted)">公式情報：<a href="https://claude.com/plugins/claude-code-setup" target="_blank" rel="noopener" style="color:var(--sk-accent2);font-weight:700;text-decoration:underline">Anthropic公式プラグインページ</a></p>
     </div>
    </div>
@@ -450,11 +462,11 @@ html,body{max-width:100%;overflow-x:hidden}
      <p class="fk-step-text">要件整理→設計→実装→テストという、本来の開発の流れに沿ってClaude Codeが進めてくれるようになる拡張です。思いつきで実装が始まって手戻りする、を防いでくれます。<br><strong>使い方：</strong>導入後は、普段通り「〇〇を作って」「このバグを直して」と頼むだけです。段取りしてから動く、という進め方に自動的に変わります。</p>
      <div class="fk-checklist"><span>開発者コミュニティ製</span><span>開発フローを型化</span><span>手戻りを減らす</span></div>
      
-     <div class="fk-prompt">
-      <div class="fk-prompt-h"><span>ターミナルに貼るコマンド</span><button class="fk-prompt-copy" type="button">コピー</button></div>
+     <details class="fk-prompt">
+      <summary class="fk-prompt-h"><span>ターミナルに貼るコマンド</span><span class="fk-prompt-h-right"><button class="fk-prompt-copy" type="button">コピー</button><span class="fk-prompt-arrow">&#9662;</span></span></summary>
       <pre>/plugin marketplace add obra/superpowers-marketplace
 /plugin install superpowers@superpowers-marketplace</pre>
-     </div>
+     </details>
      <p style="margin-top:12px;font-size:12px;color:var(--sk-muted)">公式情報：<a href="https://github.com/obra/superpowers" target="_blank" rel="noopener" style="color:var(--sk-accent2);font-weight:700;text-decoration:underline">開発者（obra氏）公式リポジトリ</a></p>
     </div>
    </div>
@@ -466,10 +478,10 @@ html,body{max-width:100%;overflow-x:hidden}
      <p class="fk-step-text">Claude Codeが書いたコードに、インジェクションなど危険な書き方が紛れていないかを自動でチェックしてくれます。特別な操作は不要で、入れておけば裏側で動き続けます。<br><strong>使い方：</strong>特にありません。入れておくだけで、コードを書くたびに自動でチェックが走り、見つかればその場で教えてくれます。</p>
      <div class="fk-checklist"><span>Anthropic公式</span><span>脆弱性を自動検知</span><span>導入後は放置でOK</span></div>
      
-     <div class="fk-prompt">
-      <div class="fk-prompt-h"><span>ターミナルに貼るコマンド</span><button class="fk-prompt-copy" type="button">コピー</button></div>
+     <details class="fk-prompt">
+      <summary class="fk-prompt-h"><span>ターミナルに貼るコマンド</span><span class="fk-prompt-h-right"><button class="fk-prompt-copy" type="button">コピー</button><span class="fk-prompt-arrow">&#9662;</span></span></summary>
       <pre>/plugin install security-guidance@claude-plugins-official</pre>
-     </div>
+     </details>
      <p style="margin-top:12px;font-size:12px;color:var(--sk-muted)">公式情報：<a href="https://code.claude.com/docs/en/security-guidance" target="_blank" rel="noopener" style="color:var(--sk-accent2);font-weight:700;text-decoration:underline">Anthropic公式ドキュメント</a></p>
     </div>
    </div>
@@ -564,7 +576,9 @@ html,body{max-width:100%;overflow-x:hidden}
 
 <script>
 document.querySelectorAll('.fk-prompt-copy').forEach(function(btn){
-  btn.addEventListener('click', function(){
+  btn.addEventListener('click', function(e){
+    e.preventDefault();
+    e.stopPropagation();
     var pre = btn.closest('.fk-prompt').querySelector('pre');
     navigator.clipboard.writeText(pre.textContent).then(function(){
       var t = btn.textContent; btn.textContent = '✓ コピー済み';
